@@ -69,8 +69,4 @@ public class Permiso implements Serializable {
         this.roles = roles;
     }
 
-    @Override
-    public String toString() {
-        return "Permiso [codigo=" + codigo + ", descripcion=" + descripcion + ", id=" + id + "]";
-    }
 }

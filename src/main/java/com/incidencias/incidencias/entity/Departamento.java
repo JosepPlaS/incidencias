@@ -31,10 +31,6 @@ public class Departamento implements Serializable {
     @JsonIgnoreProperties(value = { "departamento", "incidencias_reportadas", "incidencias_responsable" })
     private List<Profesor> profesores;
 
-    @OneToMany(mappedBy = "departamento")
-    @JsonIgnoreProperties(value = { "departamento" })
-    private List<Incidencia> incidencias;
-
     public Departamento() {
 
     }
@@ -79,17 +75,4 @@ public class Departamento implements Serializable {
         this.profesores = profesores;
     }
 
-    public List<Incidencia> getIncidencias() {
-        return incidencias;
-    }
-
-    public void setIncidencias(List<Incidencia> incidencias) {
-        this.incidencias = incidencias;
-    }
-
-    @Override
-    public String toString() {
-        return "Departamento [codigo=" + codigo + ", descripcion=" + descripcion + ", id=" + id + ", nombre=" + nombre
-                + "]";
-    }
 }

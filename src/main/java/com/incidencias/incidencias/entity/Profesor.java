@@ -145,9 +145,4 @@ public class Profesor implements Serializable {
         this.rol = rol;
     }
 
-    @Override
-    public String toString() {
-        return "Profesor [apellido1=" + apellido1 + ", apellido2=" + apellido2 + ", contrasena=" + contrasena + ", dni="
-                + dni + ", email=" + email + ", id=" + id + ", nombre=" + nombre + "]";
-    }
 }

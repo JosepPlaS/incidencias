@@ -45,27 +45,13 @@ public class IncidenciaController {
             inc.setFecha_finalizacion(incidencia.getFecha_finalizacion());
             inc.setTiempo_invertido(incidencia.getTiempo_invertido());
 
-            // RELACIONES
-            inc.setEstado(incidencia.getEstado());
-            inc.setDepartamento(incidencia.getDepartamento());
-            inc.setReportador(incidencia.getReportador());
-
-            // CONDICIONALES
-            if (incidencia.getModelo() != null)
-                inc.setModelo(incidencia.getModelo());
-            if (incidencia.getNumero_serie() != null)
-                inc.setNumero_serie(incidencia.getNumero_serie());
-
-            if (incidencia.getSistema_operativo() != null)
-                inc.setSistema_operativo(incidencia.getSistema_operativo());
-            if (incidencia.getAplicacion() != null)
-                inc.setAplicacion(incidencia.getAplicacion());
-
             // RELACIONES CONDICIONALES
-            if (incidencia.getTipo_hardware() != null)
-                inc.setTipo_hardware(incidencia.getTipo_hardware());
             if (incidencia.getResponsable() != null)
                 inc.setReportador(incidencia.getResponsable());
+            if (incidencia.getIncidencia_sw() != null)
+                inc.setIncidencia_sw(incidencia.getIncidencia_sw());
+            if (incidencia.getIncidencia_hw() != null)
+                inc.setIncidencia_hw(incidencia.getIncidencia_hw());
 
             repository.save(inc);
             return inc;

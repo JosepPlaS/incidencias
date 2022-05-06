@@ -68,9 +68,4 @@ public class Rol implements Serializable {
         this.profesores = profesores;
     }
 
-    @Override
-    public String toString() {
-        return "Rol [id=" + id + ", nombre=" + nombre + "]";
-    }
-
 }

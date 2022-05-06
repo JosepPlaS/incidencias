@@ -25,7 +25,7 @@ public class TipoHardware implements Serializable {
 
     @OneToMany(mappedBy = "tipo_hardware")
     @JsonIgnoreProperties(value = { "tipo_hardware" })
-    private List<Incidencia> incidencias;
+    private List<IncidenciaHW> incidencias_hardware;
 
     public TipoHardware() {
 
@@ -47,17 +47,11 @@ public class TipoHardware implements Serializable {
         this.nombre = nombre;
     }
 
-    public List<Incidencia> getIncidencias() {
-        return incidencias;
+    public List<IncidenciaHW> getIncidencias_hardware() {
+        return incidencias_hardware;
     }
 
-    public void setIncidencias(List<Incidencia> incidencias) {
-        this.incidencias = incidencias;
+    public void setIncidencias_hardware(List<IncidenciaHW> incidencias_hardware) {
+        this.incidencias_hardware = incidencias_hardware;
     }
-
-    @Override
-    public String toString() {
-        return "TipoHardware [id=" + id + ", nombre=" + nombre + "]";
-    }
-
 }
