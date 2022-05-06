@@ -1,0 +1,51 @@
+Has creado el proyecto mediante la extension de spring de VSCode.
+Tambien me habia planteado crearlo mediante una pagina web que te crea el proyecto comprimido -> https://start.spring.io/
+
+En el inicio de VSCode pulso: ctrl + Mayus + P
+    Selecciono la opcion 'Spring initializr: Create Maven Project...', para empezar con la creacion del proyecto
+    Selecciono la version de Spring: '2.6.6'.
+    Selecciono 'Java' como idioma de programacion. 
+    Introduzco 'com.incidencias' como id de grupo.
+    Introduzco 'incidencias' como nombre del proyecto.
+    Selecciono 'Jar' como tipo de empaquetado.
+    Selecciono la version 'JDK 11' de java para el desarrollo.
+    Añado las dependencias 'Spring Web' y 'Spring JPA'.
+
+Una vez generado el proyecto, en el pom.xml he añadido las propiedades:
+    <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>11</java.version>
+	</properties>
+    
+Y tambien las dependencias:
+    <!-- Dependencias añadidas -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.28</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.4.0-b180830.0359</version>
+		</dependency>
+
+En 'src/main/resources' en el archivo de configuracion 'application.properties', he añadido la siguiente configuracion:
+    server.port=5000
+	server.error.whitelabel.enabled=true
+
+	spring.datasource.url=jdbc:mysql://localhost:3306/GestorIncidencias
+	spring.datasource.username=root
+	spring.datasource.password=root
+
+	spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+	spring.jpa.show-sql=true
+	spring.jpa.hibernate.ddl-auto=update
+
+Despues de esto cree un controlador con un metodo "GET", para comprobar que todo funciona:
