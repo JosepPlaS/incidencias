@@ -1,10 +1,15 @@
 package com.incidencias.incidencias.controller;
 
+import java.util.ArrayList;
+
+import com.incidencias.incidencias.dto.DepartamentoDTO;
 import com.incidencias.incidencias.entity.Departamento;
 import com.incidencias.incidencias.repository.DepartamentoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,55 +28,65 @@ public class DepartamentoController {
     private DepartamentoRepository repository;
 
     @PostMapping("/insert")
-    public Departamento insert(@RequestBody Departamento departamento) {
+    public ResponseEntity insert(@RequestBody Departamento departamento) {
         try {
             repository.save(departamento);
-            return departamento;
+            return new ResponseEntity<Departamento>(repository.findById(departamento.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update/{id}")
-    public Departamento update(@RequestBody Departamento departamento, @PathVariable Integer id) {
+    public ResponseEntity update(@RequestBody Departamento departamento, @PathVariable Integer id) {
         try {
             Departamento dep = repository.findById(id).get();
-            dep.setCodigo(departamento.getCodigo());
-            dep.setNombre(departamento.getNombre());
-            dep.setDescripcion(departamento.getDescripcion());
+
+            if (departamento.getCodigo() != null)
+                dep.setCodigo(departamento.getCodigo());
+            if (departamento.getNombre() != null)
+                dep.setNombre(departamento.getNombre());
+            if (departamento.getDescripcion() != null)
+                dep.setDescripcion(departamento.getDescripcion());
+
             repository.save(dep);
-            return dep;
+            return new ResponseEntity<Departamento>(dep, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/all")
-    public Iterable<Departamento> getAll() {
+    public ResponseEntity getAll() {
         try {
-            return repository.findAll();
+            ArrayList<DepartamentoDTO> departamentos = new ArrayList<DepartamentoDTO>();
+
+            for (Departamento dep : repository.findAll())
+                departamentos.add(new DepartamentoDTO(dep));
+
+            return new ResponseEntity<Iterable<DepartamentoDTO>>(departamentos, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{id}")
-    public Departamento getOne(@PathVariable Integer id) {
+    public ResponseEntity getOne(@PathVariable Integer id) {
         try {
-            return repository.findById(id).get();
+            return new ResponseEntity<Departamento>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public Departamento delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Integer id) {
         try {
             Departamento departamento = repository.findById(id).get();
             repository.delete(departamento);
-            return departamento;
+            return new ResponseEntity<Departamento>(HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

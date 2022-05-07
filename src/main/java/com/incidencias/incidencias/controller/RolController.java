@@ -1,10 +1,15 @@
 package com.incidencias.incidencias.controller;
 
+import java.util.ArrayList;
+
+import com.incidencias.incidencias.dto.RolDTO;
 import com.incidencias.incidencias.entity.Rol;
 import com.incidencias.incidencias.repository.RolRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,53 +28,63 @@ public class RolController {
     private RolRepository repository;
 
     @PostMapping("/insert")
-    public Rol insert(@RequestBody Rol rol) {
+    public ResponseEntity insert(@RequestBody Rol rol) {
         try {
             repository.save(rol);
-            return rol;
+            return new ResponseEntity<Rol>(repository.findById(rol.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update/{id}")
-    public Rol update(@RequestBody Rol rol, @PathVariable Integer id) {
+    public ResponseEntity update(@RequestBody Rol rol, @PathVariable Integer id) {
         try {
             Rol rl = repository.findById(id).get();
-            rl.setNombre(rol.getNombre());
+
+            if (rl.getNombre() != null)
+                rl.setNombre(rol.getNombre());
+            if (rl.getPermisos() != null)
+                rl.setPermisos(rol.getPermisos());
+
             repository.save(rl);
-            return rl;
+            return new ResponseEntity<Rol>(rl, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/all")
-    public Iterable<Rol> getAll() {
+    public ResponseEntity getAll() {
         try {
-            return repository.findAll();
+            ArrayList<RolDTO> roles = new ArrayList<RolDTO>();
+
+            for (Rol rl : repository.findAll())
+                roles.add(new RolDTO(rl));
+
+            return new ResponseEntity<Iterable<RolDTO>>(roles, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{id}")
-    public Rol getOne(@PathVariable Integer id) {
+    public ResponseEntity getOne(@PathVariable Integer id) {
         try {
-            return repository.findById(id).get();
+            return new ResponseEntity<Rol>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public Rol delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Integer id) {
         try {
             Rol rol = repository.findById(id).get();
             repository.delete(rol);
-            return rol;
+            return new ResponseEntity<Rol>(HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -3,14 +3,11 @@ package com.incidencias.incidencias.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -28,8 +25,7 @@ public class Permiso implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "permiso_rol", joinColumns = @JoinColumn(name = "rolId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permisoId", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "permisos")
     @JsonIgnoreProperties(value = { "permisos" })
     private List<Rol> roles;
 

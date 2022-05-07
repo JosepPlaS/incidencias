@@ -36,16 +36,26 @@ public class ProfesorController {
     public Profesor update(@RequestBody Profesor profesor, @PathVariable Integer id) {
         try {
             Profesor pro = repository.findById(id).get();
-            pro.setDni(profesor.getDni());
-            pro.setNombre(profesor.getNombre());
-            pro.setApellido1(profesor.getApellido1());
-            pro.setApellido2(profesor.getApellido2());
-            pro.setEmail(profesor.getEmail());
-            pro.setContrasena(profesor.getContrasena());
+
+            if (profesor.getDni() != null)
+                pro.setDni(profesor.getDni());
+            if (profesor.getNombre() != null)
+                pro.setNombre(profesor.getNombre());
+            if (profesor.getApellido1() != null)
+                pro.setApellido1(profesor.getApellido1());
+            if (profesor.getApellido2() != null)
+                pro.setApellido2(profesor.getApellido2());
+            if (profesor.getEmail() != null)
+                pro.setEmail(profesor.getEmail());
+            if (profesor.getContrasena() != null)
+                pro.setContrasena(profesor.getContrasena());
 
             // RELACIONES
-            pro.setDepartamento(profesor.getDepartamento());
-            pro.setRol(profesor.getRol());
+
+            if (profesor.getDepartamento() != null)
+                pro.setDepartamento(profesor.getDepartamento());
+            if (profesor.getRol() != null)
+                pro.setRol(profesor.getRol());
 
             repository.save(pro);
             return pro;

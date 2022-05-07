@@ -1,11 +1,15 @@
 package com.incidencias.incidencias.controller;
 
+import java.util.ArrayList;
+
 import com.incidencias.incidencias.dto.EstadoDTO;
 import com.incidencias.incidencias.entity.Estado;
 import com.incidencias.incidencias.repository.EstadoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,63 +28,63 @@ public class EstadoController {
     private EstadoRepository repository;
 
     @PostMapping("/insert")
-    public Estado insert(@RequestBody Estado estado) {
+    public ResponseEntity insert(@RequestBody Estado estado) {
         try {
             repository.save(estado);
-            return estado;
+            return new ResponseEntity<Estado>(repository.findById(estado.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update/{id}")
-    public Estado update(@RequestBody Estado estado, @PathVariable Integer id) {
+    public ResponseEntity update(@RequestBody Estado estado, @PathVariable Integer id) {
         try {
             Estado est = repository.findById(id).get();
-            est.setCodigo(estado.getCodigo());
-            est.setDescripcion(estado.getDescripcion());
+
+            if (estado.getCodigo() != null)
+                est.setCodigo(estado.getCodigo());
+            if (estado.getDescripcion() != null)
+                est.setDescripcion(estado.getDescripcion());
+
             repository.save(est);
-            return est;
+            return new ResponseEntity<Estado>(est, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/all")
-    public Iterable<Estado> getAll() {
+    public ResponseEntity getAll() {
         try {
-            return repository.findAll();
+            ArrayList<EstadoDTO> estados = new ArrayList<EstadoDTO>();
+
+            for (Estado est : repository.findAll())
+                estados.add(new EstadoDTO(est));
+
+            return new ResponseEntity<Iterable<EstadoDTO>>(estados, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{id}")
-    public Estado getOne(@PathVariable Integer id) {
+    public ResponseEntity getOne(@PathVariable Integer id) {
         try {
-            return repository.findById(id).get();
+            return new ResponseEntity<Estado>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    @GetMapping("/get/partial/{id}")
-    public EstadoDTO getPartialOne(@PathVariable Integer id) {
-        try {
-            return new EstadoDTO(repository.findById(id).get());
-        } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public Estado delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Integer id) {
         try {
             Estado estado = repository.findById(id).get();
             repository.delete(estado);
-            return estado;
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -1,10 +1,15 @@
 package com.incidencias.incidencias.controller;
 
+import java.util.ArrayList;
+
+import com.incidencias.incidencias.dto.TipoHardwareDTO;
 import com.incidencias.incidencias.entity.TipoHardware;
 import com.incidencias.incidencias.repository.TipoHardwareRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,53 +28,61 @@ public class TipoHardwareController {
     private TipoHardwareRepository repository;
 
     @PostMapping("/insert")
-    public TipoHardware insert(@RequestBody TipoHardware tipo_hardware) {
+    public ResponseEntity insert(@RequestBody TipoHardware tipo_hardware) {
         try {
             repository.save(tipo_hardware);
-            return tipo_hardware;
+            return new ResponseEntity<TipoHardware>(repository.findById(tipo_hardware.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update/{id}")
-    public TipoHardware update(@RequestBody TipoHardware tipo_hardware, @PathVariable Integer id) {
+    public ResponseEntity update(@RequestBody TipoHardware tipo_hardware, @PathVariable Integer id) {
         try {
-            TipoHardware rl = repository.findById(id).get();
-            rl.setNombre(tipo_hardware.getNombre());
-            repository.save(rl);
-            return rl;
+            TipoHardware th = repository.findById(id).get();
+
+            if (tipo_hardware.getNombre() != null)
+                th.setNombre(tipo_hardware.getNombre());
+
+            repository.save(th);
+            return new ResponseEntity<TipoHardware>(th, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/all")
-    public Iterable<TipoHardware> getAll() {
+    public ResponseEntity getAll() {
         try {
-            return repository.findAll();
+            ArrayList<TipoHardwareDTO> tipos_hardware = new ArrayList<TipoHardwareDTO>();
+
+            for (TipoHardware th : repository.findAll())
+                tipos_hardware.add(new TipoHardwareDTO(th));
+
+            return new ResponseEntity<Iterable<TipoHardwareDTO>>(tipos_hardware, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{id}")
-    public TipoHardware getOne(@PathVariable Integer id) {
+    public ResponseEntity getOne(@PathVariable Integer id) {
         try {
-            return repository.findById(id).get();
+            return new ResponseEntity<TipoHardware>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public TipoHardware delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Integer id) {
         try {
             TipoHardware tipo_hardware = repository.findById(id).get();
             repository.delete(tipo_hardware);
-            return tipo_hardware;
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

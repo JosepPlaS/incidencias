@@ -1,10 +1,15 @@
 package com.incidencias.incidencias.controller;
 
+import java.util.ArrayList;
+
+import com.incidencias.incidencias.dto.PermisoDTO;
 import com.incidencias.incidencias.entity.Permiso;
 import com.incidencias.incidencias.repository.PermisoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,54 +28,63 @@ public class PermisoController {
     private PermisoRepository repository;
 
     @PostMapping("/insert")
-    public Permiso insert(@RequestBody Permiso permiso) {
+    public ResponseEntity insert(@RequestBody Permiso permiso) {
         try {
             repository.save(permiso);
-            return permiso;
+            return new ResponseEntity<Permiso>(repository.findById(permiso.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update/{id}")
-    public Permiso update(@RequestBody Permiso permiso, @PathVariable Integer id) {
+    public ResponseEntity update(@RequestBody Permiso permiso, @PathVariable Integer id) {
         try {
             Permiso perm = repository.findById(id).get();
-            perm.setCodigo(permiso.getCodigo());
-            perm.setDescripcion(permiso.getDescripcion());
+
+            if (permiso.getCodigo() != null)
+                perm.setCodigo(permiso.getCodigo());
+            if (permiso.getDescripcion() != null)
+                perm.setDescripcion(permiso.getDescripcion());
+
             repository.save(perm);
-            return perm;
+            return new ResponseEntity<Permiso>(perm, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/all")
-    public Iterable<Permiso> getAll() {
+    public ResponseEntity getAll() {
         try {
-            return repository.findAll();
+            ArrayList<PermisoDTO> permisos = new ArrayList<PermisoDTO>();
+
+            for (Permiso perm : repository.findAll())
+                permisos.add(new PermisoDTO(perm));
+
+            return new ResponseEntity<Iterable<PermisoDTO>>(permisos, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{id}")
-    public Permiso getOne(@PathVariable Integer id) {
+    public ResponseEntity getOne(@PathVariable Integer id) {
         try {
-            return repository.findById(id).get();
+            return new ResponseEntity<Permiso>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public Permiso delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Integer id) {
         try {
             Permiso perm = repository.findById(id).get();
             repository.delete(perm);
-            return perm;
+            return new ResponseEntity<Permiso>(HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
