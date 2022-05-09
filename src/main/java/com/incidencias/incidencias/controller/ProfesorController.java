@@ -1,10 +1,15 @@
 package com.incidencias.incidencias.controller;
 
+import java.util.ArrayList;
+
+import com.incidencias.incidencias.dto.ProfesorDTO;
 import com.incidencias.incidencias.entity.Profesor;
 import com.incidencias.incidencias.repository.ProfesorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,17 +28,17 @@ public class ProfesorController {
     private ProfesorRepository repository;
 
     @PostMapping("/insert")
-    public Profesor insert(@RequestBody Profesor profesor) {
+    public ResponseEntity insert(@RequestBody Profesor profesor) {
         try {
             repository.save(profesor);
-            return profesor;
+            return new ResponseEntity<Profesor>(repository.findById(profesor.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/update/{id}")
-    public Profesor update(@RequestBody Profesor profesor, @PathVariable Integer id) {
+    public ResponseEntity update(@RequestBody Profesor profesor, @PathVariable Integer id) {
         try {
             Profesor pro = repository.findById(id).get();
 
@@ -58,38 +63,43 @@ public class ProfesorController {
                 pro.setRol(profesor.getRol());
 
             repository.save(pro);
-            return pro;
+            return new ResponseEntity<Profesor>(pro, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/all")
-    public Iterable<Profesor> getAll() {
+    public ResponseEntity getAll() {
         try {
-            return repository.findAll();
+            ArrayList<ProfesorDTO> profesores = new ArrayList<ProfesorDTO>();
+
+            for (Profesor profe : repository.findAll())
+                profesores.add(new ProfesorDTO(profe));
+
+            return new ResponseEntity<Iterable<ProfesorDTO>>(profesores, HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/get/{id}")
-    public Profesor getOne(@PathVariable Integer id) {
+    public ResponseEntity getOne(@PathVariable Integer id) {
         try {
-            return repository.findById(id).get();
+            return new ResponseEntity<Profesor>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public Profesor delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Integer id) {
         try {
             Profesor profesor = repository.findById(id).get();
             repository.delete(profesor);
-            return profesor;
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception ex) {
-            return null;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -2,11 +2,13 @@ package com.incidencias.incidencias.dto;
 
 import java.io.Serializable;
 
+import com.incidencias.incidencias.entity.Permiso;
 import com.incidencias.incidencias.entity.Rol;
 
 public class RolDTO implements Serializable {
     private Integer id;
     private String nombre;
+    private Iterable<Permiso> permisos;
 
     public RolDTO() {
 
@@ -15,6 +17,7 @@ public class RolDTO implements Serializable {
     public RolDTO(Rol rol) {
         this.id = rol.getId();
         this.nombre = rol.getNombre();
+        this.permisos = rol.getPermisos();
     }
 
     public Integer getId() {
@@ -31,5 +34,13 @@ public class RolDTO implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Iterable<Permiso> getPermisos() {
+        return permisos;
+    }
+
+    public void setPermisos(Iterable<Permiso> permisos) {
+        this.permisos = permisos;
     }
 }
