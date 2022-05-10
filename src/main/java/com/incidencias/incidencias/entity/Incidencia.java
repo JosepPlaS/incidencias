@@ -48,22 +48,24 @@ public class Incidencia implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "reportador_id")
-    @JsonIgnoreProperties(value = { "incidencias_reportadas", "incidencias_responsable", "departamento" })
+    @JsonIgnoreProperties(value = { "incidencias_reportadas", "incidencias_responsable",
+            "departamento" }, allowSetters = true)
     private Profesor reportador;
 
     @ManyToOne
     @JoinColumn(name = "responsable_id")
-    @JsonIgnoreProperties(value = { "incidencias_responsable", "incidencias_reportadas", "departamento" })
+    @JsonIgnoreProperties(value = { "incidencias_responsable", "incidencias_reportadas",
+            "departamento" }, allowSetters = true)
     private Profesor responsable;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "incidencia_sw_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = { "incidencia" })
+    @JsonIgnoreProperties(value = { "incidencia" }, allowSetters = true)
     private IncidenciaSW incidencia_sw;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "incidencia_hw_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = { "incidencia" })
+    @JsonIgnoreProperties(value = { "incidencia" }, allowSetters = true)
     private IncidenciaHW incidencia_hw;
 
     public Incidencia() {

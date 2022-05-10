@@ -36,21 +36,21 @@ public class Profesor implements Serializable {
     private String contrasena;
 
     @OneToMany(mappedBy = "reportador")
-    @JsonIgnoreProperties(value = { "reportador", "responsable" })
+    @JsonIgnoreProperties(value = { "reportador", "responsable" }, allowSetters = true)
     private List<Incidencia> incidencias_reportadas;
 
     @OneToMany(mappedBy = "responsable")
-    @JsonIgnoreProperties(value = { "responsable", "reportador" })
+    @JsonIgnoreProperties(value = { "responsable", "reportador" }, allowSetters = true)
     private List<Incidencia> incidencias_responsable;
 
     @ManyToOne
     @JoinColumn(name = "departamento_id")
-    @JsonIgnoreProperties(value = { "profesores" })
+    @JsonIgnoreProperties(value = { "profesores" }, allowSetters = true)
     private Departamento departamento;
 
     @ManyToOne
     @JoinColumn(name = "rol_id")
-    @JsonIgnoreProperties(value = { "profesores" })
+    @JsonIgnoreProperties(value = { "profesores" }, allowSetters = true)
     private Rol rol;
 
     public Profesor() {

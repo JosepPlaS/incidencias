@@ -29,7 +29,7 @@ public class IncidenciaHW implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "tipo_hardware_id")
-    @JsonIgnoreProperties(value = { "incidencias_hardware" })
+    @JsonIgnoreProperties(value = { "incidencias_hardware" }, allowSetters = true)
     private TipoHardware tipo_hardware;
 
     @OneToOne(mappedBy = "incidencia_hw")

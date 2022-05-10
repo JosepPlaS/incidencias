@@ -29,11 +29,11 @@ public class Rol implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "rol_permiso", joinColumns = @JoinColumn(name = "permiso_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
-    @JsonIgnoreProperties(value = { "roles" })
+    @JsonIgnoreProperties(value = { "roles" }, allowSetters = true)
     private List<Permiso> permisos;
 
     @OneToMany(mappedBy = "rol")
-    @JsonIgnoreProperties(value = { "rol" })
+    @JsonIgnoreProperties(value = { "rol" }, allowSetters = true)
     private List<Profesor> profesores;
 
     public Rol() {

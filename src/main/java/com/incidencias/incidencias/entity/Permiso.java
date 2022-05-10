@@ -26,7 +26,7 @@ public class Permiso implements Serializable {
     private String descripcion;
 
     @ManyToMany(mappedBy = "permisos")
-    @JsonIgnoreProperties(value = { "permisos" })
+    @JsonIgnoreProperties(value = { "permisos" }, allowSetters = true)
     private List<Rol> roles;
 
     public Permiso() {

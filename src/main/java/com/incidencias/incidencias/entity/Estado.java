@@ -26,7 +26,7 @@ public class Estado implements Serializable {
     private String descripcion;
 
     @OneToMany(mappedBy = "estado")
-    @JsonIgnoreProperties(value = { "estado" })
+    @JsonIgnoreProperties(value = { "estado" }, allowSetters = true)
     private List<Incidencia> incidencias;
 
     public Estado() {

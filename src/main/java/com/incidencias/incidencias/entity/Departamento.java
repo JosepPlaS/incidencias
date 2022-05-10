@@ -28,7 +28,8 @@ public class Departamento implements Serializable {
     private String descripcion;
 
     @OneToMany(mappedBy = "departamento")
-    @JsonIgnoreProperties(value = { "departamento", "incidencias_reportadas", "incidencias_responsable" })
+    @JsonIgnoreProperties(value = { "departamento", "incidencias_reportadas",
+            "incidencias_responsable" }, allowSetters = true)
     private List<Profesor> profesores;
 
     public Departamento() {

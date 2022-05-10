@@ -24,7 +24,7 @@ public class TipoHardware implements Serializable {
     private String nombre;
 
     @OneToMany(mappedBy = "tipo_hardware")
-    @JsonIgnoreProperties(value = { "tipo_hardware" })
+    @JsonIgnoreProperties(value = { "tipo_hardware" }, allowSetters = true)
     private List<IncidenciaHW> incidencias_hardware;
 
     public TipoHardware() {
