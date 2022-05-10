@@ -2,12 +2,14 @@ package com.incidencias.incidencias.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.incidencias.incidencias.entity.Permiso;
 import com.incidencias.incidencias.entity.Rol;
 
 public class RolDTO implements Serializable {
     private Integer id;
     private String nombre;
+    @JsonIgnoreProperties(value = { "roles" })
     private Iterable<Permiso> permisos;
 
     public RolDTO() {

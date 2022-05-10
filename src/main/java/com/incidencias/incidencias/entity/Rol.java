@@ -27,7 +27,7 @@ public class Rol implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "rol_permiso", joinColumns = @JoinColumn(name = "permiso_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
     @JsonIgnoreProperties(value = { "roles" }, allowSetters = true)
     private List<Permiso> permisos;
