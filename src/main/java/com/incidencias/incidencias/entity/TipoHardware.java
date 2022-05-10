@@ -31,6 +31,10 @@ public class TipoHardware implements Serializable {
 
     }
 
+    public TipoHardware(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Integer getId() {
         return id;
     }

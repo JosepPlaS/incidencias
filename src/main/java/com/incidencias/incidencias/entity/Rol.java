@@ -40,6 +40,11 @@ public class Rol implements Serializable {
 
     }
 
+    public Rol(String nombre, List<Permiso> permisos) {
+        this.nombre = nombre;
+        this.permisos = permisos;
+    }
+
     public Integer getId() {
         return id;
     }

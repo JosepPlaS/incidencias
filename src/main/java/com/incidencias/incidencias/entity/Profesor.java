@@ -57,6 +57,13 @@ public class Profesor implements Serializable {
 
     }
 
+    public Profesor(Integer id, String email, String contrasena, Rol rol) {
+        this.id = id;
+        this.email = email;
+        this.contrasena = contrasena;
+        this.rol = rol;
+    }
+
     public Integer getId() {
         return id;
     }

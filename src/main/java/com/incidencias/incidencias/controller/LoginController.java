@@ -2,7 +2,6 @@ package com.incidencias.incidencias.controller;
 
 import com.incidencias.incidencias.dto.LoginDTO;
 import com.incidencias.incidencias.dto.Mensaje;
-import com.incidencias.incidencias.dto.ProfesorDTO;
 import com.incidencias.incidencias.entity.Profesor;
 import com.incidencias.incidencias.repository.ProfesorRepository;
 
