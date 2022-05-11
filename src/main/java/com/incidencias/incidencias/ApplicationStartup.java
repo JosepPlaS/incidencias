@@ -89,16 +89,12 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 
                 rolRepository.save(new Rol("Profesor", permisos));
 
-                permisos = (ArrayList<Permiso>) permisoRepository.findAll();
-
                 permisos.add(modDelIncidencias);
                 permisos.add(allTipoHardware);
                 permisos.add(allRol);
 
                 rolRepository.save(new Rol("Directivo", permisos));
                 rolRepository.save(new Rol("Mantenimiento TIC", permisos));
-
-                permisos = (ArrayList<Permiso>) permisoRepository.findAll();
 
                 permisos.add(impExp);
 
@@ -108,7 +104,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
                 // AÑADIR USUARIO ROOT
                 profesorRepository.save(new Profesor(1, "root", "root", admin));
             }
-
         } catch (Exception ex) {
             System.out.print(ex);
             ex.printStackTrace();

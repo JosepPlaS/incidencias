@@ -25,8 +25,10 @@ public class ProfesorDTO implements Serializable {
         this.apellido1 = profesor.getApellido1();
         this.apellido2 = profesor.getApellido2();
         this.email = profesor.getEmail();
-        this.departamento = new DepartamentoDTO(profesor.getDepartamento());
-        this.rol = new RolDTO(profesor.getRol());
+        if (profesor.getDepartamento() != null)
+            this.departamento = new DepartamentoDTO(profesor.getDepartamento());
+        if (profesor.getRol() != null)
+            this.rol = new RolDTO(profesor.getRol());
     }
 
     public Integer getId() {
