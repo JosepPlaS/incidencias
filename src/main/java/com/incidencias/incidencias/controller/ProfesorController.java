@@ -2,12 +2,14 @@ package com.incidencias.incidencias.controller;
 
 import java.util.ArrayList;
 
+import com.incidencias.incidencias.dto.Mensaje;
 import com.incidencias.incidencias.dto.ProfesorDTO;
 import com.incidencias.incidencias.entity.Profesor;
 import com.incidencias.incidencias.repository.ProfesorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,8 @@ public class ProfesorController {
         try {
             repository.save(profesor);
             return new ResponseEntity<Profesor>(repository.findById(profesor.getId()).get(), HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("DNI repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -64,6 +68,8 @@ public class ProfesorController {
 
             repository.save(pro);
             return new ResponseEntity<Profesor>(pro, HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("DNI repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -98,6 +104,10 @@ public class ProfesorController {
             Profesor profesor = repository.findById(id).get();
             repository.delete(profesor);
             return new ResponseEntity(HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(
+                    new Mensaje("No puede eliminarse el profesor, tiene asignada alguna incidencia."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -20,7 +20,7 @@ public class TipoHardware implements Serializable {
     @Id
     @Column(name = "id")
     private Integer id;
-    @Column(name = "nombre")
+    @Column(name = "nombre", unique = true)
     private String nombre;
 
     @OneToMany(mappedBy = "tipo_hardware")

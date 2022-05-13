@@ -24,7 +24,7 @@ public class Rol implements Serializable {
     @Id
     @Column(name = "id")
     private Integer id;
-    @Column(name = "nombre")
+    @Column(name = "nombre", unique = true)
     private String nombre;
 
     @ManyToMany(cascade = CascadeType.MERGE)

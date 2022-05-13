@@ -2,12 +2,14 @@ package com.incidencias.incidencias.controller;
 
 import java.util.ArrayList;
 
+import com.incidencias.incidencias.dto.Mensaje;
 import com.incidencias.incidencias.dto.TipoHardwareDTO;
 import com.incidencias.incidencias.entity.TipoHardware;
 import com.incidencias.incidencias.repository.TipoHardwareRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,8 @@ public class TipoHardwareController {
         try {
             repository.save(tipo_hardware);
             return new ResponseEntity<TipoHardware>(repository.findById(tipo_hardware.getId()).get(), HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Nombre repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -47,6 +51,8 @@ public class TipoHardwareController {
 
             repository.save(th);
             return new ResponseEntity<TipoHardware>(th, HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Nombre repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -81,6 +87,10 @@ public class TipoHardwareController {
             TipoHardware tipo_hardware = repository.findById(id).get();
             repository.delete(tipo_hardware);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(
+                    new Mensaje("No puede eliminarse tipo de hardware, pertenece a alguna incidencia."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

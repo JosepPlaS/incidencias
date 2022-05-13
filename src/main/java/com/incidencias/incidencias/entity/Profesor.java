@@ -22,7 +22,7 @@ public class Profesor implements Serializable {
     @Id
     @Column(name = "id")
     private Integer id;
-    @Column(name = "dni")
+    @Column(name = "dni", unique = true)
     private String dni;
     @Column(name = "nombre")
     private String nombre;

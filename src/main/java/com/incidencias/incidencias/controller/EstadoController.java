@@ -3,11 +3,13 @@ package com.incidencias.incidencias.controller;
 import java.util.ArrayList;
 
 import com.incidencias.incidencias.dto.EstadoDTO;
+import com.incidencias.incidencias.dto.Mensaje;
 import com.incidencias.incidencias.entity.Estado;
 import com.incidencias.incidencias.repository.EstadoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,8 @@ public class EstadoController {
         try {
             repository.save(estado);
             return new ResponseEntity<Estado>(repository.findById(estado.getId()).get(), HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -49,6 +53,8 @@ public class EstadoController {
 
             repository.save(est);
             return new ResponseEntity<Estado>(est, HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -83,6 +89,10 @@ public class EstadoController {
             Estado estado = repository.findById(id).get();
             repository.delete(estado);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(
+                    new Mensaje("No puede eliminarse el estado, esta asignado a alguna incidencia."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

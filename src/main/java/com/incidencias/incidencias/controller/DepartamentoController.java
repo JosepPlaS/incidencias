@@ -3,11 +3,13 @@ package com.incidencias.incidencias.controller;
 import java.util.ArrayList;
 
 import com.incidencias.incidencias.dto.DepartamentoDTO;
+import com.incidencias.incidencias.dto.Mensaje;
 import com.incidencias.incidencias.entity.Departamento;
 import com.incidencias.incidencias.repository.DepartamentoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,8 @@ public class DepartamentoController {
         try {
             repository.save(departamento);
             return new ResponseEntity<Departamento>(repository.findById(departamento.getId()).get(), HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Codigo o nombre repetidos."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -51,6 +55,8 @@ public class DepartamentoController {
 
             repository.save(dep);
             return new ResponseEntity<Departamento>(dep, HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Codigo o nombre repetidos."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -85,6 +91,10 @@ public class DepartamentoController {
             Departamento departamento = repository.findById(id).get();
             repository.delete(departamento);
             return new ResponseEntity<Departamento>(HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(
+                    new Mensaje("No puede eliminarse el departamento, tiene asignado a algun profesor."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -2,12 +2,14 @@ package com.incidencias.incidencias.controller;
 
 import java.util.ArrayList;
 
+import com.incidencias.incidencias.dto.Mensaje;
 import com.incidencias.incidencias.dto.PermisoDTO;
 import com.incidencias.incidencias.entity.Permiso;
 import com.incidencias.incidencias.repository.PermisoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,8 @@ public class PermisoController {
         try {
             repository.save(permiso);
             return new ResponseEntity<Permiso>(repository.findById(permiso.getId()).get(), HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -49,6 +53,8 @@ public class PermisoController {
 
             repository.save(perm);
             return new ResponseEntity<Permiso>(perm, HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -83,6 +89,9 @@ public class PermisoController {
             Permiso perm = repository.findById(id).get();
             repository.delete(perm);
             return new ResponseEntity<Permiso>(HttpStatus.OK);
+        } catch (DataIntegrityViolationException ex) {
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede eliminarse el permiso, pertenece a algun rol."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

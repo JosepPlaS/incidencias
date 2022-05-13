@@ -20,7 +20,7 @@ public class Estado implements Serializable {
     @Id
     @Column(name = "id")
     private Integer id;
-    @Column(name = "codigo")
+    @Column(name = "codigo", unique = true)
     private String codigo;
     @Column(name = "descripcion")
     private String descripcion;
