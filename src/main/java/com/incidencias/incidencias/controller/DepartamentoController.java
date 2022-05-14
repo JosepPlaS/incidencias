@@ -35,7 +35,9 @@ public class DepartamentoController {
             repository.save(departamento);
             return new ResponseEntity<Departamento>(repository.findById(departamento.getId()).get(), HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Codigo o nombre repetidos."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(
+                    new Mensaje("No puede crear el departamento, codigo o nombre repetidos."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -56,7 +58,9 @@ public class DepartamentoController {
             repository.save(dep);
             return new ResponseEntity<Departamento>(dep, HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Codigo o nombre repetidos."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(
+                    new Mensaje("No puede modificar el departamento, codigo o nombre repetidos."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -93,7 +97,7 @@ public class DepartamentoController {
             return new ResponseEntity<Departamento>(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<Mensaje>(
-                    new Mensaje("No puede eliminarse el departamento, tiene asignado a algun profesor."),
+                    new Mensaje("No puede eliminar el departamento, tiene asignado a algun profesor."),
                     HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

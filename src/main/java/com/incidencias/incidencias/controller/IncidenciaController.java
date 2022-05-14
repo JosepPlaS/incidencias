@@ -31,9 +31,9 @@ public class IncidenciaController {
     public ResponseEntity insert(@RequestBody Incidencia incidencia) {
         try {
             repository.save(incidencia);
-            return new ResponseEntity<Incidencia>(HttpStatus.OK);
+            return new ResponseEntity<Incidencia>(repository.findById(incidencia.getId()).get(), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<>(repository.findById(incidencia.getId()).get(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

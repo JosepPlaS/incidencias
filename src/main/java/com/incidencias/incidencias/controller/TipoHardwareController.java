@@ -35,7 +35,8 @@ public class TipoHardwareController {
             repository.save(tipo_hardware);
             return new ResponseEntity<TipoHardware>(repository.findById(tipo_hardware.getId()).get(), HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Nombre repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede crear el tipo de hardware, nombre repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -52,7 +53,8 @@ public class TipoHardwareController {
             repository.save(th);
             return new ResponseEntity<TipoHardware>(th, HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Nombre repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede modificar el tipo de hardware, nombre repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -89,7 +91,7 @@ public class TipoHardwareController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<Mensaje>(
-                    new Mensaje("No puede eliminarse tipo de hardware, pertenece a alguna incidencia."),
+                    new Mensaje("No puede eliminar el tipo de hardware, pertenece a alguna incidencia."),
                     HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

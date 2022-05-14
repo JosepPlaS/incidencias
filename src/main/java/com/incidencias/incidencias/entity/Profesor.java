@@ -12,10 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Table(name = "profesor")
+//@Table(name = "profesor", uniqueConstraints = {
+//        @UniqueConstraint(name = "PersonasUnicas", columnNames = { "nombre", "apellido1", "apellido2" }) })
 @Entity
 public class Profesor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

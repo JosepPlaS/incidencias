@@ -35,7 +35,8 @@ public class PermisoController {
             repository.save(permiso);
             return new ResponseEntity<Permiso>(repository.findById(permiso.getId()).get(), HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede crear el permiso, codigo repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -54,7 +55,8 @@ public class PermisoController {
             repository.save(perm);
             return new ResponseEntity<Permiso>(perm, HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede modificar el permiso, codigo repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -90,7 +92,7 @@ public class PermisoController {
             repository.delete(perm);
             return new ResponseEntity<Permiso>(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("No puede eliminarse el permiso, pertenece a algun rol."),
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede eliminar el permiso, pertenece a algun rol."),
                     HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

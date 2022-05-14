@@ -35,7 +35,8 @@ public class EstadoController {
             repository.save(estado);
             return new ResponseEntity<Estado>(repository.findById(estado.getId()).get(), HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede crear el estado, codigo repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -54,7 +55,8 @@ public class EstadoController {
             repository.save(est);
             return new ResponseEntity<Estado>(est, HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Codigo repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede modificar el estado, codigo repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -91,7 +93,7 @@ public class EstadoController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<Mensaje>(
-                    new Mensaje("No puede eliminarse el estado, esta asignado a alguna incidencia."),
+                    new Mensaje("No puede eliminar el estado, esta asignado a alguna incidencia."),
                     HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

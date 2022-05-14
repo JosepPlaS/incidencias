@@ -32,10 +32,14 @@ public class ProfesorController {
     @PostMapping("/insert")
     public ResponseEntity insert(@RequestBody Profesor profesor) {
         try {
+            if (profesor.getDepartamento().getCodigo() == null) {
+                profesor.setDepartamento(null);
+            }
             repository.save(profesor);
             return new ResponseEntity<Profesor>(repository.findById(profesor.getId()).get(), HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("DNI repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede crear el profesor, DNI repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -60,16 +64,15 @@ public class ProfesorController {
                 pro.setContrasena(profesor.getContrasena());
 
             // RELACIONES
-
-            if (profesor.getDepartamento() != null)
-                pro.setDepartamento(profesor.getDepartamento());
+            pro.setDepartamento(profesor.getDepartamento());
             if (profesor.getRol() != null)
                 pro.setRol(profesor.getRol());
 
             repository.save(pro);
             return new ResponseEntity<Profesor>(pro, HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("DNI repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede modificar el profesor, DNI repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -106,7 +109,7 @@ public class ProfesorController {
             return new ResponseEntity(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<Mensaje>(
-                    new Mensaje("No puede eliminarse el profesor, tiene asignada alguna incidencia."),
+                    new Mensaje("No puede eliminar el profesor, tiene asignada alguna incidencia."),
                     HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

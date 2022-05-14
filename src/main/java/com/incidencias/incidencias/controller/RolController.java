@@ -35,7 +35,8 @@ public class RolController {
             repository.save(rol);
             return new ResponseEntity<Rol>(repository.findById(rol.getId()).get(), HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Nombre repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede crear el rol, nombre repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -54,7 +55,8 @@ public class RolController {
             repository.save(rl);
             return new ResponseEntity<Rol>(rl, HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("Nombre repetido."), HttpStatus.valueOf(402));
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede modificar el rol, nombre repetido."),
+                    HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -90,7 +92,7 @@ public class RolController {
             repository.delete(rol);
             return new ResponseEntity<Rol>(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
-            return new ResponseEntity<Mensaje>(new Mensaje("No puede eliminarse el rol, pertenece a algun profesor."),
+            return new ResponseEntity<Mensaje>(new Mensaje("No puede eliminar el rol, pertenece a algun profesor."),
                     HttpStatus.valueOf(402));
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
