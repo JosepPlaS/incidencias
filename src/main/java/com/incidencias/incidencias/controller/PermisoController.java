@@ -30,7 +30,7 @@ public class PermisoController {
     private PermisoRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody Permiso permiso) {
+    public ResponseEntity<?> insert(@RequestBody Permiso permiso) {
         try {
             repository.save(permiso);
             return new ResponseEntity<Permiso>(repository.findById(permiso.getId()).get(), HttpStatus.OK);
@@ -43,7 +43,7 @@ public class PermisoController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody Permiso permiso, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody Permiso permiso, @PathVariable Integer id) {
         try {
             Permiso perm = repository.findById(id).get();
 
@@ -63,7 +63,7 @@ public class PermisoController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<PermisoDTO> permisos = new ArrayList<PermisoDTO>();
 
@@ -77,7 +77,7 @@ public class PermisoController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Permiso>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -86,7 +86,7 @@ public class PermisoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             Permiso perm = repository.findById(id).get();
             repository.delete(perm);

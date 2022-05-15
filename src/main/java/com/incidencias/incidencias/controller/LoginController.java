@@ -23,7 +23,7 @@ public class LoginController {
     private ProfesorRepository repository;
 
     @PostMapping("/login")
-    public ResponseEntity insert(@RequestBody Profesor profesor) {
+    public ResponseEntity<?> insert(@RequestBody Profesor profesor) {
         try {
             for (Profesor pro : repository.findByEmail(profesor.getEmail()))
                 if (pro.getContrasena().equals(profesor.getContrasena())) {

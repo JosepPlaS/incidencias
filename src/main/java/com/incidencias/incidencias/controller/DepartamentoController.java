@@ -30,7 +30,7 @@ public class DepartamentoController {
     private DepartamentoRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody Departamento departamento) {
+    public ResponseEntity<?> insert(@RequestBody Departamento departamento) {
         try {
             repository.save(departamento);
             return new ResponseEntity<Departamento>(repository.findById(departamento.getId()).get(), HttpStatus.OK);
@@ -44,7 +44,7 @@ public class DepartamentoController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody Departamento departamento, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody Departamento departamento, @PathVariable Integer id) {
         try {
             Departamento dep = repository.findById(id).get();
 
@@ -67,7 +67,7 @@ public class DepartamentoController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<DepartamentoDTO> departamentos = new ArrayList<DepartamentoDTO>();
 
@@ -81,7 +81,7 @@ public class DepartamentoController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Departamento>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -90,7 +90,7 @@ public class DepartamentoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             Departamento departamento = repository.findById(id).get();
             repository.delete(departamento);

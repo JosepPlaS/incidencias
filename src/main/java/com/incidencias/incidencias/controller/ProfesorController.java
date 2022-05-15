@@ -30,7 +30,7 @@ public class ProfesorController {
     private ProfesorRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody Profesor profesor) {
+    public ResponseEntity<?> insert(@RequestBody Profesor profesor) {
         try {
             if (profesor.getDepartamento().getCodigo() == null) {
                 profesor.setDepartamento(null);
@@ -46,7 +46,7 @@ public class ProfesorController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody Profesor profesor, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody Profesor profesor, @PathVariable Integer id) {
         try {
             Profesor pro = repository.findById(id).get();
 
@@ -79,7 +79,7 @@ public class ProfesorController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<ProfesorDTO> profesores = new ArrayList<ProfesorDTO>();
 
@@ -93,7 +93,7 @@ public class ProfesorController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Profesor>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -102,11 +102,11 @@ public class ProfesorController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             Profesor profesor = repository.findById(id).get();
             repository.delete(profesor);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (DataIntegrityViolationException ex) {
             return new ResponseEntity<Mensaje>(
                     new Mensaje("No puede eliminar el profesor, tiene asignada alguna incidencia."),

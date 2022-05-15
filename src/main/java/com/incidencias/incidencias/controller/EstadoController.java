@@ -30,7 +30,7 @@ public class EstadoController {
     private EstadoRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody Estado estado) {
+    public ResponseEntity<?> insert(@RequestBody Estado estado) {
         try {
             repository.save(estado);
             return new ResponseEntity<Estado>(repository.findById(estado.getId()).get(), HttpStatus.OK);
@@ -43,7 +43,7 @@ public class EstadoController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody Estado estado, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody Estado estado, @PathVariable Integer id) {
         try {
             Estado est = repository.findById(id).get();
 
@@ -63,7 +63,7 @@ public class EstadoController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<EstadoDTO> estados = new ArrayList<EstadoDTO>();
 
@@ -77,7 +77,7 @@ public class EstadoController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Estado>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -86,7 +86,7 @@ public class EstadoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             Estado estado = repository.findById(id).get();
             repository.delete(estado);

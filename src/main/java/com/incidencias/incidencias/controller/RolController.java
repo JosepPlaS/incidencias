@@ -30,7 +30,7 @@ public class RolController {
     private RolRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody Rol rol) {
+    public ResponseEntity<?> insert(@RequestBody Rol rol) {
         try {
             repository.save(rol);
             return new ResponseEntity<Rol>(repository.findById(rol.getId()).get(), HttpStatus.OK);
@@ -43,7 +43,7 @@ public class RolController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody Rol rol, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody Rol rol, @PathVariable Integer id) {
         try {
             Rol rl = repository.findById(id).get();
 
@@ -63,7 +63,7 @@ public class RolController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<RolDTO> roles = new ArrayList<RolDTO>();
 
@@ -77,7 +77,7 @@ public class RolController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Rol>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -86,7 +86,7 @@ public class RolController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             Rol rol = repository.findById(id).get();
             repository.delete(rol);

@@ -2,7 +2,6 @@ package com.incidencias.incidencias.dto;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.incidencias.incidencias.entity.Profesor;
 
 public class LoginDTO implements Serializable {

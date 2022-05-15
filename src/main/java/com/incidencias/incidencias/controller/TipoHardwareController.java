@@ -30,7 +30,7 @@ public class TipoHardwareController {
     private TipoHardwareRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody TipoHardware tipo_hardware) {
+    public ResponseEntity<?> insert(@RequestBody TipoHardware tipo_hardware) {
         try {
             repository.save(tipo_hardware);
             return new ResponseEntity<TipoHardware>(repository.findById(tipo_hardware.getId()).get(), HttpStatus.OK);
@@ -43,7 +43,7 @@ public class TipoHardwareController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody TipoHardware tipo_hardware, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody TipoHardware tipo_hardware, @PathVariable Integer id) {
         try {
             TipoHardware th = repository.findById(id).get();
 
@@ -61,7 +61,7 @@ public class TipoHardwareController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<TipoHardwareDTO> tipos_hardware = new ArrayList<TipoHardwareDTO>();
 
@@ -75,7 +75,7 @@ public class TipoHardwareController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<TipoHardware>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -84,7 +84,7 @@ public class TipoHardwareController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             TipoHardware tipo_hardware = repository.findById(id).get();
             repository.delete(tipo_hardware);

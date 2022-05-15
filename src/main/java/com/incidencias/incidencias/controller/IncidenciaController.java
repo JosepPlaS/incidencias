@@ -28,7 +28,7 @@ public class IncidenciaController {
     private IncidenciaRepository repository;
 
     @PostMapping("/insert")
-    public ResponseEntity insert(@RequestBody Incidencia incidencia) {
+    public ResponseEntity<?> insert(@RequestBody Incidencia incidencia) {
         try {
             repository.save(incidencia);
             return new ResponseEntity<Incidencia>(repository.findById(incidencia.getId()).get(), HttpStatus.OK);
@@ -38,7 +38,7 @@ public class IncidenciaController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity update(@RequestBody Incidencia incidencia, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody Incidencia incidencia, @PathVariable Integer id) {
         try {
             Incidencia inc = repository.findById(id).get();
 
@@ -77,7 +77,7 @@ public class IncidenciaController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             ArrayList<IncidenciaDTO> incidencias = new ArrayList<IncidenciaDTO>();
 
@@ -91,7 +91,7 @@ public class IncidenciaController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity getOne(@PathVariable Integer id) {
+    public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Incidencia>(repository.findById(id).get(), HttpStatus.OK);
         } catch (Exception ex) {
@@ -100,7 +100,7 @@ public class IncidenciaController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
             Incidencia incidencia = repository.findById(id).get();
             repository.delete(incidencia);
