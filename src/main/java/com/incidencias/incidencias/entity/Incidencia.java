@@ -2,7 +2,6 @@ package com.incidencias.incidencias.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Time;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,7 +38,9 @@ public class Incidencia implements Serializable {
     @Column(name = "fecha_finalizacion")
     private Date fecha_finalizacion;
     @Column(name = "tiempo_invertido")
-    private Time tiempo_invertido;
+    private Integer tiempo_invertido;
+    @Column(name = "historial", columnDefinition = "Text")
+    private String historial;
 
     @ManyToOne
     @JoinColumn(name = "estado_id")
@@ -58,12 +59,12 @@ public class Incidencia implements Serializable {
             "departamento" }, allowSetters = true)
     private Profesor responsable;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "incidencia_sw_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = { "incidencia" }, allowSetters = true)
     private IncidenciaSW incidencia_sw;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "incidencia_hw_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = { "incidencia" }, allowSetters = true)
     private IncidenciaHW incidencia_hw;
@@ -136,12 +137,20 @@ public class Incidencia implements Serializable {
         this.fecha_finalizacion = fecha_finalizacion;
     }
 
-    public Time getTiempo_invertido() {
+    public Integer getTiempo_invertido() {
         return tiempo_invertido;
     }
 
-    public void setTiempo_invertido(Time tiempo_invertido) {
+    public void setTiempo_invertido(Integer tiempo_invertido) {
         this.tiempo_invertido = tiempo_invertido;
+    }
+
+    public String getHistorial() {
+        return historial;
+    }
+
+    public void setHistorial(String historial) {
+        this.historial = historial;
     }
 
     public Estado getEstado() {

@@ -84,7 +84,8 @@ public class ProfesorController {
             ArrayList<ProfesorDTO> profesores = new ArrayList<ProfesorDTO>();
 
             for (Profesor profe : repository.findAll())
-                profesores.add(new ProfesorDTO(profe));
+                if (!profe.getNombre().equals("root"))
+                    profesores.add(new ProfesorDTO(profe));
 
             return new ResponseEntity<Iterable<ProfesorDTO>>(profesores, HttpStatus.OK);
         } catch (Exception ex) {
@@ -96,6 +97,15 @@ public class ProfesorController {
     public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Profesor>(repository.findById(id).get(), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get_dto/{id}")
+    public ResponseEntity<?> getOneDto(@PathVariable Integer id) {
+        try {
+            return new ResponseEntity<ProfesorDTO>(new ProfesorDTO(repository.findById(id).get()), HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

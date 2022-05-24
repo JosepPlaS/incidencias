@@ -24,8 +24,8 @@ public class Departamento implements Serializable {
     private String codigo;
     @Column(name = "nombre", unique = true)
     private String nombre;
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "localizacion")
+    private String localizacion;
 
     @OneToMany(mappedBy = "departamento")
     @JsonIgnoreProperties(value = { "departamento", "incidencias_reportadas",
@@ -60,12 +60,12 @@ public class Departamento implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getLocalizacion() {
+        return localizacion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setLocalizacion(String localizacion) {
+        this.localizacion = localizacion;
     }
 
     public List<Profesor> getProfesores() {

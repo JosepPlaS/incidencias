@@ -1,6 +1,7 @@
 package com.incidencias.incidencias.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.incidencias.incidencias.dto.EstadoDTO;
 import com.incidencias.incidencias.dto.Mensaje;
@@ -80,6 +81,21 @@ public class EstadoController {
     public ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
             return new ResponseEntity<Estado>(repository.findById(id).get(), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get/c-{codigo}")
+    public ResponseEntity<?> getByCodigo(@PathVariable String codigo) {
+        try {
+            List<Estado> estado = repository.findByCodigo(codigo);
+
+            if (estado.size() > 1)
+                return new ResponseEntity<Mensaje>(new Mensaje("Error, se han encontrado mas de un estado."),
+                        HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<EstadoDTO>(new EstadoDTO(estado.get(0)), HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

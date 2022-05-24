@@ -52,8 +52,8 @@ public class DepartamentoController {
                 dep.setCodigo(departamento.getCodigo());
             if (departamento.getNombre() != null)
                 dep.setNombre(departamento.getNombre());
-            if (departamento.getDescripcion() != null)
-                dep.setDescripcion(departamento.getDescripcion());
+            if (departamento.getLocalizacion() != null)
+                dep.setLocalizacion(departamento.getLocalizacion());
 
             repository.save(dep);
             return new ResponseEntity<Departamento>(dep, HttpStatus.OK);

@@ -7,6 +7,7 @@ import com.incidencias.incidencias.entity.Profesor;
 public class LoginDTO implements Serializable {
     private Integer id;
     private String email;
+    private String dni;
     private RolDTO rol;
 
     public LoginDTO() {
@@ -16,6 +17,7 @@ public class LoginDTO implements Serializable {
     public LoginDTO(Profesor profesor) {
         this.id = profesor.getId();
         this.email = profesor.getEmail();
+        this.dni = profesor.getDni();
         this.rol = new RolDTO(profesor.getRol());
     }
 
@@ -33,6 +35,14 @@ public class LoginDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public RolDTO getRol() {

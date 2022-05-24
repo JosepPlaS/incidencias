@@ -57,8 +57,13 @@ public class Profesor implements Serializable {
 
     }
 
-    public Profesor(Integer id, String email, String contrasena, Rol rol) {
+    public Profesor(Integer id, String dni, String nombre, String apellido1, String apellido2, String email,
+            String contrasena, Rol rol) {
         this.id = id;
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellido1 = apellido1;
+        this.apellido2 = apellido2;
         this.email = email;
         this.contrasena = contrasena;
         this.rol = rol;

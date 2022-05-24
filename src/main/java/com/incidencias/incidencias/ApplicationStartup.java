@@ -102,7 +102,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
                 rolRepository.save(admin);
 
                 // AÑADIR USUARIO ROOT
-                profesorRepository.save(new Profesor(1, "root", "root", admin));
+                profesorRepository.save(new Profesor(1, "root", "root", "", "", "root", "root", admin));
             }
         } catch (Exception ex) {
             System.out.print(ex);

@@ -2,7 +2,6 @@ package com.incidencias.incidencias.dto;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Time;
 
 import com.incidencias.incidencias.entity.Incidencia;
 import com.incidencias.incidencias.entity.IncidenciaHW;
@@ -16,7 +15,7 @@ public class IncidenciaHwDTO implements Serializable {
     private String descripcion;
     private String observaciones;
     private Date fecha_finalizacion;
-    private Time tiempo_invertido;
+    private Integer tiempo_invertido;
     private IncidenciaHW incidencia_hw;
     private EstadoDTO estado;
 
@@ -98,11 +97,11 @@ public class IncidenciaHwDTO implements Serializable {
         this.fecha_finalizacion = fecha_finalizacion;
     }
 
-    public Time getTiempo_invertido() {
+    public Integer getTiempo_invertido() {
         return tiempo_invertido;
     }
 
-    public void setTiempo_invertido(Time tiempo_invertido) {
+    public void setTiempo_invertido(Integer tiempo_invertido) {
         this.tiempo_invertido = tiempo_invertido;
     }
 

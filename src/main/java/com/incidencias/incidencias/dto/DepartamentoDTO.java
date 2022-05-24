@@ -18,7 +18,7 @@ public class DepartamentoDTO implements Serializable {
         this.id = departamento.getId();
         this.codigo = departamento.getCodigo();
         this.nombre = departamento.getNombre();
-        this.descripcion = departamento.getDescripcion();
+        this.descripcion = departamento.getLocalizacion();
     }
 
     public Integer getId() {
