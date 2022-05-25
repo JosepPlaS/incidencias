@@ -8,7 +8,7 @@ public class DepartamentoDTO implements Serializable {
     private Integer id;
     private String codigo;
     private String nombre;
-    private String descripcion;
+    private String localizacion;
 
     public DepartamentoDTO() {
 
@@ -18,7 +18,7 @@ public class DepartamentoDTO implements Serializable {
         this.id = departamento.getId();
         this.codigo = departamento.getCodigo();
         this.nombre = departamento.getNombre();
-        this.descripcion = departamento.getLocalizacion();
+        this.localizacion = departamento.getLocalizacion();
     }
 
     public Integer getId() {
@@ -45,12 +45,12 @@ public class DepartamentoDTO implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getLocalizacion() {
+        return localizacion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setLocalizacion(String localizacion) {
+        this.localizacion = localizacion;
     }
 
 }

@@ -193,4 +193,20 @@ public class Incidencia implements Serializable {
         this.incidencia_hw = incidencia_hw;
     }
 
+    public String getCodigoIncidencia() {
+        if (id > 999) {
+            return id + "";
+        } else if (id > 99) {
+            return "0" + id;
+        } else if (id > 9) {
+            return "00" + id;
+        } else {
+            return "000" + id;
+        }
+    }
+
+    public Integer getTipoIncidencia() {
+        return tipo_incidencia;
+    }
+
 }
