@@ -60,7 +60,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
                         "Se ha reportado la incidencia, a la espera de la contestación de Mantenimiento TIC."));
                 estadoRepository.save(new Estado("Comunicada",
                         "Se ha asignado su resolución a un profesor o al Servicio de Asistencia Informática SAI."));
-                estadoRepository.save(new Estado("En proceso", "Se esta tabajando en la solución de la incidencia."));
+                estadoRepository.save(new Estado("En proceso", "Se esta trabajando en la solución de la incidencia."));
                 estadoRepository.save(new Estado("Solución inviable", "No es posible resolver la incidencia."));
                 estadoRepository.save(new Estado("Solucionada", "Se ha resuelto la incidencia."));
             }
@@ -73,7 +73,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
                         "Permiso para añadir, modificar y eliminar tipos de hardware.");
                 Permiso allRol = new Permiso("ALRO", "Permiso para añadir, modificar y eliminar roles.");
                 Permiso impExp = new Permiso("IEDA", "Permiso para la importación y exportación de datos.");
-                Permiso informes = new Permiso("INFO", "Permiso para generación y visualización de informes.");
+                Permiso informes = new Permiso("INFO", "Permiso para la visualización de informes.");
 
                 permisoRepository.save(addIncidencias);
                 permisoRepository.save(modDelIncidencias);
@@ -102,7 +102,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
                 rolRepository.save(admin);
 
                 // AÑADIR USUARIO ROOT
-                profesorRepository.save(new Profesor(1, "root", "root", "", "", "root", "root", admin));
+                profesorRepository.save(new Profesor(1, "00000000P", "Super", "Usuario", "IscaIncidencias",
+                        "iscaincidencias@gmail.com", "Isca2022.", admin));
             }
         } catch (Exception ex) {
             System.out.print(ex);

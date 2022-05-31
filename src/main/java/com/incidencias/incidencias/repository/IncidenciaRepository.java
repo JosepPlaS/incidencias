@@ -17,4 +17,7 @@ public interface IncidenciaRepository extends CrudRepository<Incidencia, Integer
 
     @Query(value = "select * from incidencia i where i.tipo_incidencia = :tipo_incidencia", nativeQuery = true)
     List<Incidencia> findByTipo(Integer tipo_incidencia);
+
+    @Query(value = "select * from incidencia i where YEAR(i.fecha_introduccion) = :anyo", nativeQuery = true)
+    List<Incidencia> findByAnyo(Integer anyo);
 }

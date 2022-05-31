@@ -48,28 +48,30 @@ public class IncidenciaController {
     final String passwordSender = "Isca2022.";
 
     public boolean sendEmail(String receptor, String asunto, String mensaje) {
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.socketFactory.port", "465");
-        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.port", "465");
-
-        Session session = Session.getInstance(prop, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(emailSender, passwordSender);
-            }
-        });
-
         try {
-            MimeMessage message = new MimeMessage(session);
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(receptor));
+            if (!receptor.equals("root")) {
+                Properties prop = new Properties();
+                prop.put("mail.smtp.host", "smtp.gmail.com");
+                prop.put("mail.smtp.socketFactory.port", "465");
+                prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+                prop.put("mail.smtp.auth", "true");
+                prop.put("mail.smtp.port", "465");
 
-            message.setSubject(asunto);
-            message.setText(mensaje);
+                Session session = Session.getInstance(prop, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(emailSender, passwordSender);
+                    }
+                });
 
-            Transport.send(message);
+                MimeMessage message = new MimeMessage(session);
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(receptor));
+
+                message.setSubject(asunto);
+                message.setText(mensaje);
+
+                Transport.send(message);
+            }
             return true;
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -108,6 +110,7 @@ public class IncidenciaController {
                 inc.setFecha_finalizacion(incidencia.getFecha_finalizacion());
             if (incidencia.getTiempo_invertido() != null)
                 inc.setTiempo_invertido(incidencia.getTiempo_invertido());
+            inc.setSai(incidencia.getSai());
             inc.setHistorial(incidencia.getHistorial());
 
             // RELACIONES CONDICIONALES
@@ -134,11 +137,17 @@ public class IncidenciaController {
             String asunto = "";
             String mensaje = "";
 
-            if (incidencia.getResponsable() != null) {
+            if (!incidencia.getSai()) {
 
                 inc.setHistorial(incidencia.getHistorial());
 
-                inc.setEstado(estadoRepository.findByCodigo("Comunicada").get(0));
+                if (inc.getEstado().getCodigo().equals("Reportada"))
+                    inc.setEstado(estadoRepository.findByCodigo("Comunicada").get(0));
+
+                inc.setSai(incidencia.getSai());
+                inc.setResponsable(incidencia.getResponsable());
+
+                repository.save(inc);
 
                 // EMAIL RESPONSABLE
                 asunto = "IscaIncidencias - Se te ha asignado una incidencia:";
@@ -161,12 +170,16 @@ public class IncidenciaController {
 
                 sendEmail(incidencia.getReportador().getEmail(), asunto, mensaje);
 
-                inc.setResponsable(incidencia.getResponsable());
-
             } else {
                 inc.setHistorial(incidencia.getHistorial());
-                inc.setResponsable(null);
-                inc.setEstado(estadoRepository.findByCodigo("En proceso").get(0));
+
+                if (inc.getEstado().getCodigo().equals("Reportada"))
+                    inc.setEstado(estadoRepository.findByCodigo("En proceso").get(0));
+
+                inc.setSai(incidencia.getSai());
+                inc.setResponsable(incidencia.getResponsable());
+
+                repository.save(inc);
 
                 // EMAIL REPORTADOR
                 asunto = "IscaIncidencias - Se ha asignado :";
@@ -177,8 +190,17 @@ public class IncidenciaController {
                         + ".\nVisita IscaIncidencias para mas información.\nSaludos.";
 
                 sendEmail(incidencia.getReportador().getEmail(), asunto, mensaje);
+
+                // EMAIL RESPONSABLE
+                asunto = "IscaIncidencias - Se te ha asignado una incidencia:";
+                mensaje = "Hola, " + incidencia.getResponsable().getNombre() + " "
+                        + incidencia.getResponsable().getApellido1()
+                        + "\nSe te ha asignado como responsable de la incidencia con código "
+                        + incidencia.getCodigoIncidencia() + " debes de colaborar con el SAI para su resolucion"
+                        + ".\nVisita IscaIncidencias para mas información.\nSaludos.";
+
+                sendEmail(incidencia.getResponsable().getEmail(), asunto, mensaje);
             }
-            repository.save(inc);
             return new ResponseEntity<Incidencia>(inc, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -191,6 +213,7 @@ public class IncidenciaController {
             Incidencia inc = repository.findById(id).get();
 
             if (incidencia.getEstado().getCodigo().equals("Reportada")) {
+                inc.setSai(null);
                 inc.setResponsable(null);
                 inc.setFecha_finalizacion(null);
                 inc.setTiempo_invertido(null);
@@ -369,6 +392,139 @@ public class IncidenciaController {
 
             return new ResponseEntity<Iterable<IncidenciaDTO>>(incidencias, HttpStatus.OK);
         } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get/estadisticas/{anyo}")
+    public ResponseEntity<?> getEstadisticas(@PathVariable Integer anyo) {
+        try {
+            int tmp = 0;
+
+            int pendientes = 0, solucionadas = 0, noSolucionadas = 0;
+
+            int hardware = 0, software = 0, internet = 0, otros = 0;
+
+            int enero = 0, febrero = 0, marzo = 0, abril = 0, mayo = 0, junio = 0, julio = 0, agosto = 0,
+                    septiembre = 0, octubre = 0, noviembre = 0, diciembre = 0;
+
+            int tiempo_invertido_media = 0;
+            int tiempo_invertido = 0; // media
+
+            int tiempo_dias_media = 0;
+            int tiempo_dias = 0; // media
+
+            int sai = 0;
+
+            for (Incidencia inc : repository.findByAnyo(anyo)) {
+                if (inc.getSai() != null && inc.getSai())
+                    sai++;
+
+                if (inc.getEstado().getCodigo().equals("Solucionada"))
+                    solucionadas++;
+                else if (inc.getEstado().getCodigo().equals("Solución inviable"))
+                    noSolucionadas++;
+                else
+                    pendientes++;
+
+                if (inc.getTipoIncidencia() == 0)
+                    otros++;
+                else if (inc.getTipoIncidencia() == 1)
+                    hardware++;
+                else if (inc.getTipoIncidencia() == 2)
+                    software++;
+                else if (inc.getTipoIncidencia() == 3)
+                    internet++;
+
+                if (inc.getTiempo_invertido() != null) {
+                    tiempo_invertido += inc.getTiempo_invertido();
+                    tiempo_invertido_media++;
+                }
+
+                tmp = inc.getFecha_introduccion().getMonth();
+                switch (tmp) {
+                    case 0:
+                        enero++;
+                        break;
+                    case 1:
+                        febrero++;
+                        break;
+                    case 2:
+                        marzo++;
+                        break;
+                    case 3:
+                        abril++;
+                        break;
+                    case 4:
+                        mayo++;
+                        break;
+                    case 5:
+                        junio++;
+                        break;
+                    case 6:
+                        julio++;
+                        break;
+                    case 7:
+                        agosto++;
+                        break;
+                    case 8:
+                        septiembre++;
+                        break;
+                    case 9:
+                        octubre++;
+                        break;
+                    case 10:
+                        noviembre++;
+                        break;
+                    case 11:
+                        diciembre++;
+                        break;
+                }
+
+                tmp = 0;
+                if (inc.getFecha_finalizacion() != null) {
+                    tiempo_dias_media++;
+                    tiempo_dias += (int) ((inc.getFecha_finalizacion().getTime()
+                            - inc.getFecha_introduccion().getTime())
+                            / 86400000);
+
+                }
+            }
+
+            int media_invertido = (tiempo_invertido != 0) ? tiempo_invertido / tiempo_invertido_media : 0;
+
+            int media_dias = (tiempo_dias != 0) ? tiempo_dias / tiempo_dias_media : 0;
+
+            String response = "[{" +
+                    "\"pendiente\":" + pendientes + "," +
+                    "\"solucionadas\":" + solucionadas + "," +
+                    "\"noSolucionadas\":" + noSolucionadas + "," +
+                    "\"total\":" + (pendientes + solucionadas + noSolucionadas) + "," +
+                    "\"hardware\":" + hardware + "," +
+                    "\"software\":" + software + "," +
+                    "\"internet\":" + internet + "," +
+                    "\"otros\":" + otros + "," +
+                    "\"enero\":" + enero + "," +
+                    "\"febrero\":" + febrero + "," +
+                    "\"marzo\":" + marzo + "," +
+                    "\"abril\":" + abril + "," +
+                    "\"mayo\":" + mayo + "," +
+                    "\"junio\":" + junio + "," +
+                    "\"julio\":" + julio + "," +
+                    "\"agosto\":" + agosto + "," +
+                    "\"septiembre\":" + septiembre + "," +
+                    "\"octubre\":" + octubre + "," +
+                    "\"noviembre\":" + noviembre + "," +
+                    "\"diciembre\":" + diciembre + "," +
+                    "\"sai\":" + sai + "," +
+                    "\"noSai\":" + ((pendientes + solucionadas + noSolucionadas) - sai) + "," +
+                    "\"tiempo_invertido\":" + (media_invertido) + "," +
+                    "\"tiempo_dias\":" + (media_dias)
+                    + "}]";
+
+            return new ResponseEntity<String>(response, HttpStatus.OK);
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

@@ -84,7 +84,7 @@ public class ProfesorController {
             ArrayList<ProfesorDTO> profesores = new ArrayList<ProfesorDTO>();
 
             for (Profesor profe : repository.findAll())
-                if (!profe.getNombre().equals("root"))
+                if (!profe.getEmail().equals("iscaincidencias@gmail.com"))
                     profesores.add(new ProfesorDTO(profe));
 
             return new ResponseEntity<Iterable<ProfesorDTO>>(profesores, HttpStatus.OK);

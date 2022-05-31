@@ -16,6 +16,7 @@ public class IncidenciaDTO implements Serializable {
     private Date fecha_finalizacion;
     private Integer tiempo_invertido;
     private String historial;
+    private Boolean sai;
     private EstadoDTO estado;
     private ProfesorDTO reportador;
     private ProfesorDTO responsable;
@@ -31,6 +32,7 @@ public class IncidenciaDTO implements Serializable {
         this.fecha_finalizacion = incidencia.getFecha_finalizacion();
         this.tiempo_invertido = incidencia.getTiempo_invertido();
         this.historial = incidencia.getHistorial();
+        this.sai = incidencia.getSai();
         this.estado = new EstadoDTO(incidencia.getEstado());
         if (incidencia.getReportador() != null)
             this.reportador = new ProfesorDTO(incidencia.getReportador());
@@ -116,6 +118,14 @@ public class IncidenciaDTO implements Serializable {
 
     public void setHistorial(String historial) {
         this.historial = historial;
+    }
+
+    public Boolean getSai() {
+        return sai;
+    }
+
+    public void setSai(Boolean sai) {
+        this.sai = sai;
     }
 
     public EstadoDTO getEstado() {

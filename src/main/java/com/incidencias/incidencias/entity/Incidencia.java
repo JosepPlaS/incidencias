@@ -41,6 +41,7 @@ public class Incidencia implements Serializable {
     private Integer tiempo_invertido;
     @Column(name = "historial", columnDefinition = "Text")
     private String historial;
+    private Boolean sai;
 
     @ManyToOne
     @JoinColumn(name = "estado_id")
@@ -151,6 +152,14 @@ public class Incidencia implements Serializable {
 
     public void setHistorial(String historial) {
         this.historial = historial;
+    }
+
+    public Boolean getSai() {
+        return sai;
+    }
+
+    public void setSai(Boolean sai) {
+        this.sai = sai;
     }
 
     public Estado getEstado() {
